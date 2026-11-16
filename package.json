@@ -1,0 +1,31 @@
+{
+  "name": "certifica-local",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24.0.0" },
+  "scripts": {
+    "dev": "node server/index.mjs --dev",
+    "build": "tsc -b && vite build",
+    "prestart": "npm run build",
+    "start": "node server/index.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "test:ui": "node --test tests/home.browser.mjs",
+    "tutorial:capture": "node tutorial/capture.mjs",
+    "tutorial:video": "node tutorial/render.mjs"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "lucide-react": "^0.468.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "playwright": "^1.56.1",
+    "typescript": "~5.9.3",
+    "vite": "^6.4.1"
+  }
+}

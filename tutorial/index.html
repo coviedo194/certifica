@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cómo usar Certifica · Guía paso a paso</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#172b24;color:#eef4ee;font-family:Arial,Helvetica,sans-serif}
+    #viewport{overflow:hidden;width:100%}.stage{position:relative;width:1920px;height:1080px;overflow:hidden;background:radial-gradient(ellipse at 10% 12%,#234637,transparent 58%),#152a22;transform-origin:top left}
+    .brand{position:absolute;left:64px;top:44px;font-size:30px;font-weight:700;letter-spacing:-1px}.brand span{color:#b9da91}
+    .series{position:absolute;right:64px;top:49px;letter-spacing:3px;font-size:18px;color:#b5c7bb}
+    .guide{position:absolute;left:64px;top:170px;width:380px}.eyebrow{font-size:19px;color:#c2dfa4;font-weight:700;letter-spacing:3px}
+    h1{font-size:61px;line-height:1.04;letter-spacing:-2px;margin:26px 0 30px;text-wrap:balance}
+    .instruction{font-size:28px;line-height:1.48;color:#d1dfd4;margin:0}.tip{font-size:23px;line-height:1.45;margin-top:38px;border-left:3px solid #b9da91;padding-left:22px;color:#c3d6c6}
+    .screen{position:absolute;left:500px;top:132px;width:1356px;height:848px;border:1px solid #718373;border-radius:18px;overflow:hidden;background:#f7f8f4;box-shadow:0 40px 90px #0005}
+    .screen img{display:block;width:100%;height:100%}.focus{position:absolute;border:5px solid #90c759;border-radius:12px;box-shadow:0 0 0 4px #172b2466;pointer-events:none}
+    .focus::before{content:attr(data-label);position:absolute;right:0;bottom:calc(100% + 10px);background:#d2edb5;color:#183522;border-radius:8px;padding:8px 14px;font-size:23px;line-height:1.15;font-weight:700;white-space:nowrap;box-shadow:0 3px 14px #0003}
+    .caption{position:absolute;left:64px;right:64px;bottom:41px;font-size:23px;line-height:1.35;color:#d9e7da}
+    .caption small{display:block;font-size:14px;color:#a6bbaa;margin-top:10px;letter-spacing:.5px}
+    .progress{position:absolute;bottom:0;left:0;height:6px;background:#b9da91;transition:width .25s}
+    .controls{max-width:1000px;margin:24px auto;padding:0 24px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+    button,select{font:inherit;border:1px solid #6f8d7b;border-radius:8px;background:#254e39;color:#fff;padding:12px 16px;cursor:pointer}button:focus-visible,select:focus-visible{outline:3px solid #c2dfa4;outline-offset:3px}
+    select{max-width:100%;flex:1}button:disabled{opacity:.45;cursor:default}.transcript{max-width:1000px;padding:0 24px 32px;margin:auto;color:#cfddcf;line-height:1.65}
+    .transcript summary{cursor:pointer}.status{max-width:1000px;padding:0 24px;margin:12px auto;color:#d1dfd4}
+    html[data-render] .controls,html[data-render] .transcript,html[data-render] .status{display:none}
+    html[data-render] .stage{transform:none!important}html[data-render] .progress{transition:none}
+  </style>
+</head>
+<body>
+  <div id="viewport"><main class="stage" aria-labelledby="title">
+    <div class="brand">certifica<span>.</span></div><div class="series">GUÍA RÁPIDA · AB-410</div>
+    <section class="guide"><div class="eyebrow" id="step"></div><h1 id="title"></h1><p class="instruction" id="instruction"></p><p class="tip" id="tip"></p></section>
+    <div class="screen" id="screen"><img id="capture" alt=""><div class="focus" id="focus" hidden></div></div>
+    <div class="caption"><span id="caption"></span><small>CAPTURAS CON DATOS DE DEMOSTRACIÓN · CONTENIDO NO OFICIAL · NARRACIÓN SINTÉTICA LOCAL</small></div>
+    <div class="progress" id="progress"></div>
+  </main></div>
+  <div class="controls"><button id="previous" aria-label="Escena anterior">← Anterior</button><button id="play">▶ Reproducir con voz</button><button id="next">Siguiente →</button><select id="chapters" aria-label="Ir a una escena"></select></div>
+  <p class="status" id="status" role="status">Puedes escuchar la guía completa o avanzar a tu ritmo.</p>
+  <details class="transcript"><summary>Leer la narración de esta escena</summary><p id="transcript"></p></details>
+  <audio id="audio" preload="metadata"></audio>
+  <script id="tutorial-data" type="application/json">
+  [
+    {
+      "id": "01-empezar",
+      "title": "Solo empieza por aquí.",
+      "instruction": "Pulsa «Comenzar primera lección». No hace falta configurar nada más.",
+      "tip": "La ruta empieza por Copilot Studio: aprovecha lo que ya sabes de Power Platform.",
+      "caption": "Tu primera tarea: abrir una lección. El resto puede esperar.",
+      "narration": "Vamos poco a poco. Al entrar en Certifica, no necesitas decidir entre todos los menús. Pulsa Comenzar primera lección. La ruta empieza por Copilot Studio y aprovecha tu experiencia en Power Platform.",
+      "focusLabel": "1 · Pulsa aquí"
+    },
+    {
+      "id": "02-estudiar",
+      "title": "Una sección cada vez.",
+      "instruction": "«Modo enfoque» oculta los menús. Lee la sección y usa «Siguiente sección» para avanzar.",
+      "tip": "Sal con el botón superior o con Esc. Tu punto de lectura se guarda.",
+      "caption": "No necesitas terminar el módulo de una sentada.",
+      "narration": "Lee una sección y avanza con Siguiente sección. Si quieres leer sin distracciones, activa Modo enfoque: oculta los menús y deja solo la lectura. Puedes salir con el botón superior o con Escape. Tu punto de lectura se guarda automáticamente. Haz también los retos y laboratorios. Al llegar al final, marca el módulo como completado.",
+      "focusLabel": "2 · Avanza a tu ritmo"
+    },
+    {
+      "id": "03-practicar",
+      "title": "Después, cinco preguntas.",
+      "instruction": "En la lección, busca «Practicar este módulo». Elige cinco preguntas y comienza.",
+      "tip": "Empieza con «Práctica a tu ritmo», no con el simulacro.",
+      "caption": "Una sesión corta del mismo módulo ayuda a comprobar lo aprendido.",
+      "narration": "Cuando quieras comprobar lo aprendido, usa Practicar este módulo, al final de la lección. En esta pantalla elige cinco preguntas y pulsa Comenzar práctica. Para empezar, quédate con Práctica a tu ritmo: aquí sí verás las explicaciones.",
+      "focusLabel": "3 · Comienza la práctica"
+    },
+    {
+      "id": "04-responder",
+      "title": "Respuesta y esfuerzo.",
+      "instruction": "Selecciona una opción. Después indica Fácil, Media o Difícil, y confirma.",
+      "tip": "Valora el esfuerzo antes de ver si acertaste. Una respuesta correcta también puede costarte.",
+      "caption": "Confirmar guarda tu respuesta y tu dificultad. Después ya no puedes cambiarlas.",
+      "narration": "Primero elige tu respuesta. Después indica cuánto te costó: Fácil, Media o Difícil. Hazlo antes de conocer el resultado. No es lo mismo acertar con dudas que tenerlo claro. Pulsa Confirmar respuesta para guardar ambas cosas; una respuesta confirmada ya no se puede cambiar.",
+      "focusLabel": "4 · Indica cuánto te costó"
+    },
+    {
+      "id": "05-entender",
+      "title": "Entiende el porqué.",
+      "instruction": "Lee la explicación de las alternativas. Luego avanza con «Siguiente pregunta».",
+      "tip": "Si algo no encaja, «Repasar este concepto» te devuelve al módulo.",
+      "caption": "Equivocarte aquí sirve para encontrar qué conviene reforzar.",
+      "narration": "Ahora aparece el resultado y la explicación de cada alternativa. No te quedes solo con la letra correcta: entiende por qué las otras no encajan. Puedes volver al módulo con Repasar este concepto y después continuar con Siguiente pregunta.",
+      "focusLabel": "5 · Lee la explicación"
+    },
+    {
+      "id": "06-reforzar",
+      "title": "Practica lo que cuesta.",
+      "instruction": "En «Practicar», elige «Lo que me cuesta» y «Mayor dificultad primero».",
+      "tip": "«Repasos vencidos» muestra solo preguntas cuyo momento de repaso ya llegó.",
+      "caption": "Así concentras el tiempo en tus dudas, en lugar de repetirlo todo.",
+      "narration": "Para reforzar tus dudas, entra en Practicar. Elige Lo que me cuesta y Mayor dificultad primero. Si prefieres seguir el repaso programado, usa Repasos vencidos. Es normal que ese filtro esté vacío al principio: las preguntas difíciles o falladas vuelven a los diez minutos.",
+      "focusLabel": "6 · Cambia estos filtros"
+    },
+    {
+      "id": "07-progreso",
+      "title": "Mira dónde mejorar.",
+      "instruction": "Abre «Mi progreso» para revisar aciertos, dificultad e historial.",
+      "tip": "Todo se guarda en SQLite local. Los datos de este vídeo son solo de demostración.",
+      "caption": "El porcentaje es de práctica: no equivale a la nota oficial de Microsoft.",
+      "narration": "En Mi progreso puedes revisar aciertos, dificultad e historial y detectar los temas que necesitan otra vuelta. Tus datos se guardan en SQLite en este equipo. Este porcentaje es solo de práctica: no equivale a la puntuación oficial de Microsoft ni predice un aprobado.",
+      "focusLabel": "7 · Revisa tu avance"
+    },
+    {
+      "id": "08-simulacro",
+      "title": "El simulacro, después.",
+      "instruction": "En «Practicar», selecciona «Simulacro de examen» cuando quieras entrenar con tiempo.",
+      "tip": "Aquí no hay explicaciones hasta finalizar. Salir no detiene el reloj.",
+      "caption": "Preguntas originales y no oficiales. Las no contestadas cuentan en el resultado.",
+      "narration": "Más adelante, prueba el Simulacro de examen desde Practicar. Tiene tiempo y no muestra explicaciones hasta finalizar. Importante: salir de la página no detiene el reloj. Las preguntas no contestadas también cuentan en el resultado. Este banco es original y no oficial; no reproduce el examen de Microsoft.",
+      "focusLabel": "8 · Vigila el tiempo"
+    },
+    {
+      "id": "09-retomar",
+      "title": "Por hoy, eso es todo.",
+      "instruction": "En «Mi espacio», continúa el estudio o pulsa «Retomar práctica guardada».",
+      "tip": "Una práctica pendiente no te obliga a dejar el estudio. No necesitas terminarla antes de leer.",
+      "caption": "Tu rutina: entender → practicar → repasar. Un paso cada vez.",
+      "narration": "No necesitas hacerlo todo hoy. Quédate con esta rutina: una sección, cinco preguntas y repasar lo que cueste. Para parar una práctica, usa Pausar y salir. En Mi espacio puedes seguir estudiando o usar el enlace Retomar práctica guardada. No tienes que terminar el cuestionario para leer.",
+      "focusLabel": "9 · Retoma aquí"
+    }
+  ]
+  </script>
+  <script src="assets/layout.js"></script>
+  <script>
+    const scenes=JSON.parse(document.getElementById('tutorial-data').textContent);
+    const params=new URLSearchParams(location.search),render=params.has('render');
+    if(render)document.documentElement.dataset.render='true';
+    const audio=document.getElementById('audio'),chapters=document.getElementById('chapters');
+    let index=Math.max(0,scenes.findIndex(s=>s.id===params.get('scene'))),playing=false;
+    for(const [i,scene] of scenes.entries()){const option=document.createElement('option');option.value=i;option.textContent=`${i+1}. ${scene.title}`;chapters.append(option);}
+    function resize(){if(render)return;const scale=Math.min(innerWidth/1920,1);document.querySelector('.stage').style.transform=`scale(${scale})`;document.getElementById('viewport').style.height=`${1080*scale}px`;}
+    function show(i){
+      index=i;const scene=scenes[index];audio.pause();audio.src=`generated/${scene.id}.m4a`;
+      for(const field of ['title','instruction','tip','caption'])document.getElementById(field).textContent=scene[field];
+      document.getElementById('transcript').textContent=scene.narration;
+      document.getElementById('step').textContent=`PASO ${index+1} DE ${scenes.length}`;
+      const img=document.getElementById('capture');img.src=`assets/${scene.id}.png`;img.alt=`Captura de demostración: ${scene.title}`;
+      const focus=document.getElementById('focus'),box=window.TUTORIAL_LAYOUT?.[scene.id];focus.hidden=!box;
+      if(box){for(const key of ['left','top','width','height'])focus.style[key]=`${box[key]*100}%`;focus.dataset.label=scene.focusLabel;}
+      document.getElementById('progress').style.width=`${(index+1)/scenes.length*100}%`;
+      document.getElementById('previous').disabled=index===0;document.getElementById('next').disabled=index===scenes.length-1;chapters.value=index;
+    }
+    async function play(){try{await audio.play();playing=true;document.getElementById('play').textContent='Ⅱ Pausar';document.getElementById('status').textContent='Narración local en español. Puedes pausar o saltar a otra escena.';}catch(error){playing=false;document.getElementById('play').textContent='▶ Reproducir con voz';document.getElementById('status').textContent=`No se pudo reproducir el audio. Genera los archivos con npm run tutorial:video. ${error.message}`;}}
+    function pause(){playing=false;audio.pause();document.getElementById('play').textContent='▶ Reproducir con voz';}
+    function change(i){const resume=playing;show(i);if(resume)play();}
+    document.getElementById('play').onclick=()=>playing?pause():play();
+    document.getElementById('previous').onclick=()=>change(index-1);document.getElementById('next').onclick=()=>change(index+1);
+    chapters.onchange=()=>change(Number(chapters.value));
+    audio.onended=()=>{if(index<scenes.length-1&&playing)change(index+1);else pause();};
+    show(index);resize();addEventListener('resize',resize);
+  </script>
+</body>
+</html>

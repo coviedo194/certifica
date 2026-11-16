@@ -1,0 +1,11 @@
+node_modules/
+dist/
+data/
+*.tsbuildinfo
+.DS_Store
+*.log
+.env
+artifacts/
+tutorial/.cache/
+tutorial/generated/
+tutorial/*.mp4

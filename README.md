@@ -228,6 +228,27 @@ Repositorio Git inicializado localmente; no hay remoto ni publicación automáti
 
 ## Registro editorial
 
+- **2026-11-18 · contenido 2026-11-18.3:** cada diapositiva muestra un foco
+  visible en una lista breve con uno a tres conceptos o resultados concretos que
+  anticipan qué trabajar. Las respuestas orientativas también usan viñetas para
+  separar las ideas. Se asignaron a las 73 diapositivas sin reemplazar sus
+  explicaciones ni ejercicios. Se actualizan las doce versiones de lección; se
+  conservan IDs, orden de secciones y progreso.
+- **2026-11-18 · contenido 2026-11-18.2:** la ayuda de «Recuperación activa»
+  ahora muestra una respuesta orientativa concreta para cada ejercicio, en vez
+  de la instrucción genérica de revisar el temario. Se aclaró el escenario del
+  agente para distinguir la política consultada, las herramientas, la condición
+  de cancelación, la confirmación y la comprobación de permisos en el servicio.
+  El botón indica que abre una respuesta explicada; se conservan los IDs, las
+  secciones y el progreso, y se actualizan las versiones de las doce lecciones.
+- **2026-11-18 · contenido 2026-11-18.1:** añadidos ejemplos breves y originales
+  en explicaciones que se beneficiaban de una situación concreta: vistas y
+  formularios; asincronía y resúmenes; páginas generativas y permisos; delegación,
+  fórmulas con nombre y errores; agentes y seguridad; manejo de errores y
+  diagnóstico de flujos; evaluación de prompts; integración de IA; límites de
+  columnas y procesos. No se añadieron ejemplos por rutina donde ya había uno,
+  ni se alteraron recuperación activa, laboratorios, preguntas, IDs o referencias.
+  Versiones de lección actualizadas conservando su identidad e historial.
 - **2026-11-16 · contenido 2026-11-16.8:** identificado Agent builder de Power
   Apps y aclarado que su creación desde aplicaciones de lienzo no limita las
   otras formas de crear agentes en Copilot Studio. Introducido el nombre completo

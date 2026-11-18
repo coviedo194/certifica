@@ -146,6 +146,43 @@ test('el modo enfoque permite leer y avanzar, y Esc restaura la vista sin perder
   assert.match(await page.locator('.reading-card > p strong').first().innerText(), /^Tema \(topic\)/);
 });
 
+test('la ayuda de recuperación muestra una respuesta concreta para el caso', async t => {
+  const { page, request, home } = await fixture(t);
+  await request('/study/ab-410/agents', 'PUT', { blockIndex: 5, completed: false });
+  await home();
+  await page.evaluate(() => { location.hash = 'study/agents'; });
+  await page.locator('.reading-card h1').waitFor();
+  assert.equal(await page.locator('.reading-card h1').innerText(), 'Recuperación activa');
+  assert.match(await page.locator('.slide-concepts').innerText(), /Foco de esta diapositiva/);
+  assert.match(await page.locator('.slide-concepts').innerText(), /Verificar identidad y estado en el servicio/);
+  assert.equal(await page.locator('.slide-concepts li').count(), 3);
+
+  await page.getByRole('button', { name: 'Ver respuesta explicada', exact: true }).click();
+  const explanation = page.locator('.recall-guide');
+  await explanation.waitFor();
+  assert.match(await explanation.innerText(), /Una respuesta posible/);
+  assert.match(await explanation.innerText(), /Conocimiento: la política/);
+  assert.match(await explanation.innerText(), /sigue pendiente/);
+  assert.match(await explanation.innerText(), /identidad/);
+  assert.equal(await explanation.locator('li').count(), 5);
+});
+
+test('el modo enfoque aprovecha el ancho disponible sin desbordarse en móvil', async t => {
+  const { page, home } = await fixture(t);
+  await home();
+  await page.locator('.home-primary').click();
+  await page.locator('.reading-card').waitFor();
+  await page.getByRole('button', { name: 'Modo enfoque', exact: true }).click();
+
+  for (const [width, height, minCardWidth] of [[1920, 1080, 1400], [1440, 900, 1200], [360, 740, 0]]) {
+    await page.setViewportSize({ width, height });
+    const card = await page.locator('.reading-card').boundingBox();
+    assert(card && card.width >= minCardWidth && card.width <= width,
+      `Ancho inesperado del contenido en enfoque a ${width}×${height}: ${JSON.stringify(card)}`);
+    assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+  }
+});
+
 test('la lectura aparece arriba, con el contexto plegado y el enfoque dentro de la tarjeta', async t => {
   const { page, request, home } = await fixture(t);
   await request('/study/ab-410/agents', 'PUT', { blockIndex: 2, completed: false });

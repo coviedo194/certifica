@@ -29,7 +29,16 @@ export function validateContent(catalog = certifications) {
       }
       lessonIds.add(lesson.id);
       if (!lesson.sources.length || lesson.sources.some(id => !sourceIds.has(id))) throw new Error(`Fuentes inválidas: ${lesson.id}`);
-      for (const { image } of lesson.blocks) {
+      for (const block of lesson.blocks) {
+        if (!Array.isArray(block.concepts) || block.concepts.length < 1 || block.concepts.length > 3 ||
+            block.concepts.some(concept => typeof concept !== 'string' || !concept.trim())) {
+          throw new Error(`Conceptos de diapositiva inválidos: ${lesson.id}`);
+        }
+        if (block.kind === 'recall' && (!Array.isArray(block.guidance) || block.guidance.length < 2 ||
+            block.guidance.some(point => typeof point !== 'string' || !point.trim()))) {
+          throw new Error(`Guía de recuperación inválida: ${lesson.id}`);
+        }
+        const { image } = block;
         if (!image) continue;
         if (['src', 'alt', 'caption', 'originalUrl', 'attribution', 'license', 'licenseUrl', 'licenseSource', 'reviewed']
           .some(field => typeof image[field] !== 'string' || !image[field].trim()) ||

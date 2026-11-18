@@ -53,6 +53,16 @@ personales, sesiones reales ni archivos de SQLite en Git.
    Destacar con `**negrita**` el término que se define y separar definición,
    ejemplo y recomendación cuando se mezclen. Sustituir expresiones vagas como
    «experiencias compatibles» por el producto, editor o alcance concreto.
+   Añadir un ejemplo breve y original cuando una explicación abstracta se entienda
+   mejor con una situación concreta; usarlo para aclarar la decisión o el resultado,
+   no para repetir el laboratorio o la recuperación activa. No forzar ejemplos en
+   cada bloque ni presentarlos como preguntas o material oficial del examen.
+   La ayuda de cada recuperación activa debe explicar una respuesta posible para ese
+   caso y por qué; no sustituirla por una invitación genérica a revisar el temario.
+   Cada diapositiva debe mostrar entre uno y tres conceptos o resultados de
+   aprendizaje concretos, distintos del título y coherentes con su explicación,
+   repaso o laboratorio, en una lista breve. La respuesta orientativa de cada
+   recuperación activa también debe separar las ideas en viñetas.
    Revisar también el resto del material cuando una explicación cause confusión:
    una idea por párrafo, primero definición y después ejemplo. Aclarar términos
    como asíncrono, determinista, idempotencia o alcance al introducirlos. Mantener
@@ -144,7 +154,9 @@ Usar `npm test` y `npm run build`. Si se modifica UI, comprobar en navegador:
 práctica → respuesta + dificultad → feedback → siguiente → reanudar → finalizar;
 simulacro sin feedback; estudio reanudable; estadísticas; los tres temas y móvil.
 Usar un SQLite de prueba separado para no contaminar el progreso del usuario.
-No agregar herramientas de infraestructura solo por cobertura.
+No agregar herramientas de infraestructura solo por cobertura. El modo enfoque
+debe aprovechar el ancho disponible hasta 1480 px, ajustarse al viewport en móvil
+y evitar desplazamiento horizontal.
 Priorizar contenido sobre cabeceras decorativas: comprobar 1920×1080
 (ancho × alto), portátil y móvil en ambas orientaciones. La primera fila de la
 ruta debe empezar antes de 260 px y mostrar al menos siete módulos completos en

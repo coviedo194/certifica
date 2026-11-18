@@ -62,6 +62,14 @@ test('el contenido vincula cada pregunta y aptitud a lecciones y fuentes existen
   validateContent();
   for (const lesson of ab410.lessons) {
     assert.ok(lesson.blocks.some(b => b.kind === 'recall'), `${lesson.id}: falta recuperación activa`);
+    for (const recall of lesson.blocks.filter(b => b.kind === 'recall')) {
+      assert.ok(Array.isArray(recall.guidance) && recall.guidance.length >= 2 &&
+        recall.guidance.every(point => point.trim()), `${lesson.id}: falta una explicación útil para recuperación activa`);
+    }
+    for (const block of lesson.blocks) {
+      assert.ok(block.concepts.length > 0 && block.concepts.length <= 3,
+        `${lesson.id}/${block.title}: indica el foco de aprendizaje`);
+    }
     assert.ok(lesson.blocks.some(b => b.kind === 'lab'), `${lesson.id}: falta aplicación práctica`);
     assert.ok(ab410.questions.some(q => q.lessonId === lesson.id), `${lesson.id}: sin preguntas`);
   }
@@ -69,6 +77,12 @@ test('el contenido vincula cada pregunta y aptitud a lecciones y fuentes existen
   const invalid = structuredClone(ab410);
   invalid.questions[0].explanations = [];
   assert.throws(() => validateContent([invalid]), /Pregunta inválida/);
+  const invalidRecall = structuredClone(ab410);
+  invalidRecall.lessons[0].blocks.find(b => b.kind === 'recall').guidance = '';
+  assert.throws(() => validateContent([invalidRecall]), /Guía de recuperación inválida/);
+  const invalidConcepts = structuredClone(ab410);
+  invalidConcepts.lessons[0].blocks[0].concepts = [];
+  assert.throws(() => validateContent([invalidConcepts]), /Conceptos de diapositiva inválidos/);
 });
 
 test('las capturas tienen archivo local íntegro, dimensiones y referencias válidas', async () => {

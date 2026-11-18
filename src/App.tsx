@@ -291,9 +291,14 @@ function Study({ state, lessonId, busy, act, refresh, focused, onFocusChange }: 
               <span>{focused ? 'Salir del modo enfoque' : 'Modo enfoque'}</span>{focused && <kbd>Esc</kbd>}
             </button>
           </div>
-          <Tag>{b.kind === 'lab' ? 'APLICA LO QUE SABES' : b.kind === 'recall' ? 'RECUERDA SIN MIRAR' : b.kind === 'trap' ? 'ERROR FRECUENTE' : 'LO ESENCIAL'}</Tag><h1>{b.title}</h1><p><LessonText text={b.body} /></p>
+          <Tag>{b.kind === 'lab' ? 'APLICA LO QUE SABES' : b.kind === 'recall' ? 'RECUERDA SIN MIRAR' : b.kind === 'trap' ? 'ERROR FRECUENTE' : 'LO ESENCIAL'}</Tag><h1>{b.title}</h1>
+          <div className="slide-concepts" aria-label="Foco de esta diapositiva">
+            <strong>Foco de esta diapositiva</strong>
+            <ul>{b.concepts.map(concept => <li key={concept}>{concept}</li>)}</ul>
+          </div>
+          <p><LessonText text={b.body} /></p>
           {b.image && <StudyFigure key={b.image.src} image={b.image} sources={cert.sources} />}
-          {b.kind === 'recall' && <><button className="subtle" onClick={() => setShowRecall(!showRecall)}>{showRecall ? 'Ocultar guía' : 'Ya lo pensé · ver cómo comprobarlo'}<ChevronRight size={15} /></button>{showRecall && <div className="recall-guide">Comprueba tu explicación contra los conceptos anteriores y sus fuentes. Debes poder justificar la elección, descartar otra alternativa y describir un caso en el que tu decisión cambiaría. Si no puedes, repasa antes de avanzar.</div>}</>}
+          {b.kind === 'recall' && <><button className="subtle" onClick={() => setShowRecall(!showRecall)}>{showRecall ? 'Ocultar explicación' : 'Ver respuesta explicada'}<ChevronRight size={15} /></button>{showRecall && b.guidance && <div className="recall-guide"><strong>Una respuesta posible</strong><ul>{b.guidance.map((point, i) => <li key={i}><LessonText text={point} /></li>)}</ul></div>}</>}
         </article>
         <div className="reading-progress"><div className="reading-meta"><span>SECCIÓN {index + 1} DE {lesson.blocks.length}</span><span>{Math.round((index + 1) / lesson.blocks.length * 100)}%</span></div><Progress value={(index + 1) / lesson.blocks.length * 100} /></div>
         <div className="reading-actions"><button disabled={busy || index === 0} onClick={() => act(() => save(index - 1, Boolean(saved?.completed)))}><ArrowLeft size={16} />Anterior</button>{index < lesson.blocks.length - 1

@@ -9,7 +9,8 @@ export type StudyImage = {
 };
 export type Lesson = {
   id: string; domain: string; title: string; minutes: number; focus: boolean; version: number;
-  objectives: string[]; sources: string[]; blocks: { title: string; body: string; kind: string; image?: StudyImage }[];
+  objectives: string[]; sources: string[];
+  blocks: { title: string; body: string; kind: string; concepts: string[]; image?: StudyImage; guidance?: string[] }[];
 };
 export type StudyProgress = { lessonId: string; blockIndex: number; completed: number; updatedAt: string };
 export type AppState = {

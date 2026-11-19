@@ -5,6 +5,15 @@ lecciones y preguntas se conservan salvo que se indique lo contrario.
 
 ## AB-410
 
+- **2026-11-19 · contenido 2026-11-19.1:** eliminada la pista por longitud: en 50 de
+  60 preguntas la opción correcta era la más larga; ahora lo es en 10 y nunca supera
+  en más de un 10 % al distractor más largo. Se acortaron respuestas correctas y se
+  sustituyeron distractores poco plausibles («el color del formulario», «la
+  temperatura del modelo») por alternativas verosímiles, con sus explicaciones
+  actualizadas. Las 50 preguntas modificadas pasan a versión 2; se conservan IDs,
+  enunciados, respuesta y fuentes. No se volvieron a consultar las fuentes. Además,
+  cada sesión baraja el orden de las opciones; las sesiones anteriores conservan su
+  orden y su calificación.
 - **2026-11-18 · contenido 2026-11-18.3:** cada diapositiva muestra un foco
   visible en una lista breve con uno a tres conceptos o resultados concretos que
   anticipan qué trabajar. Las respuestas orientativas también usan viñetas para

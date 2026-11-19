@@ -43,8 +43,8 @@ hazlo solo en una red de confianza y nunca lo publiques en Internet.
 
 - **Estudio** por módulos con recuperación activa, laboratorios, modo enfoque y
   lectura en voz alta con voces locales del navegador.
-- **Práctica** configurable (nuevas, falladas, difíciles o repasos vencidos) con
-  explicación de cada alternativa tras responder.
+- **Práctica** configurable (nuevas, falladas, difíciles o repasos vencidos), con
+  las opciones en orden aleatorio y explicación de cada alternativa tras responder.
 - **Repaso espaciado**: las preguntas falladas o difíciles vuelven antes; las fáciles,
   cada vez más tarde.
 - **Simulacro** cronometrado, sin feedback hasta terminar, con preguntas repartidas

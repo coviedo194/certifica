@@ -60,7 +60,14 @@ export function validateContent(catalog = certifications) {
         throw new Error(`Pregunta inválida: ${q.id}`);
       }
       questionIds.add(q.id);
+      // The correct option must not stand out by length (more than 10% over the longest distractor).
+      const longestDistractor = Math.max(...q.options.filter((_, i) => i !== q.answer).map(o => o.length));
+      if (q.options[q.answer].length > longestDistractor * 1.1) throw new Error(`Pista por longitud: ${q.id}`);
     }
+    // Across the bank, "pick the longest" must not beat chance (25% with four options) by much.
+    const longest = cert.questions.filter(q =>
+      q.options[q.answer].length > Math.max(...q.options.filter((_, i) => i !== q.answer).map(o => o.length))).length;
+    if (longest > cert.questions.length * 0.35) throw new Error(`Sesgo de longitud en ${cert.id}: ${longest}/${cert.questions.length}`);
     if (cert.recommended.length !== lessonIds.size || new Set(cert.recommended).size !== lessonIds.size ||
         cert.recommended.some(id => !lessonIds.has(id))) throw new Error(`Ruta inválida: ${cert.id}`);
   }

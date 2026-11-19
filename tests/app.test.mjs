@@ -8,7 +8,7 @@ import { get as httpGet } from 'node:http';
 import { createApp } from '../server/app.mjs';
 import { ab410 } from '../content/ab410.mjs';
 import { validateContent } from '../content/index.mjs';
-import { questionProgress, selectQuestions } from '../server/learning.mjs';
+import { questionProgress, selectQuestions, shuffleOptions } from '../server/learning.mjs';
 
 async function fixture(t, path = ':memory:') {
   const { app, db } = createApp(path);
@@ -36,11 +36,18 @@ async function fixture(t, path = ':memory:') {
   }, expected);
   return { db, request, start, stop, base };
 }
+// Session options are shuffled, so locate the bank's correct option by its text.
+const correctIndex = shown => {
+  const bank = ab410.questions.find(q => q.id === shown.id);
+  return shown.options.indexOf(bank.options[bank.answer]);
+};
 const answerFor = (session, overrides = {}) => ({
   questionId: session.questions[session.cursor].id,
-  selected: ab410.questions.find(q => q.id === session.questions[session.cursor].id).answer,
+  selected: correctIndex(session.questions[session.cursor]),
   difficulty: 2, durationMs: 1200, ...overrides,
 });
+const wrongFor = (session, overrides = {}) =>
+  answerFor(session, { selected: correctIndex(session.questions[session.cursor]) === 0 ? 1 : 0, ...overrides });
 
 test('las certificaciones de interés son recordatorios, no paquetes disponibles', async t => {
   const { request, start } = await fixture(t);
@@ -83,6 +90,16 @@ test('el contenido vincula cada pregunta y aptitud a lecciones y fuentes existen
   const invalidConcepts = structuredClone(ab410);
   invalidConcepts.lessons[0].blocks[0].concepts = [];
   assert.throws(() => validateContent([invalidConcepts]), /Conceptos de diapositiva inválidos/);
+  const lengthCue = structuredClone(ab410);
+  const cued = lengthCue.questions[0];
+  cued.options[cued.answer] += ' con una explicación mucho más detallada que las demás';
+  assert.throws(() => validateContent([lengthCue]), /Pista por longitud/);
+  const lengthBias = structuredClone(ab410);
+  for (const question of lengthBias.questions) {
+    const longest = Math.max(...question.options.filter((_, i) => i !== question.answer).map(o => o.length));
+    question.options[question.answer] = question.options[question.answer].padEnd(longest + 1, '.');
+  }
+  assert.throws(() => validateContent([lengthBias]), /Sesgo de longitud/);
 });
 
 test('las capturas tienen archivo local íntegro, dimensiones y referencias válidas', async () => {
@@ -110,6 +127,26 @@ test('el simulacro de 40 respeta 11/11/18 y no repite preguntas; el orden fijo e
   assert.deepEqual(ab410.domains.map(d => exam.filter(q => ab410.lessons.find(l => l.id === q.lessonId).domain === d.id).length), [11, 11, 18]);
   const config = { mode: 'practice', order: 'stable', filter: 'all', count: 10 };
   assert.deepEqual(selectQuestions(ab410, progress, config).map(q => q.id), ab410.questions.slice(0, 10).map(q => q.id));
+});
+
+test('las opciones se barajan por sesión conservando respuesta y explicaciones', async t => {
+  const question = ab410.questions[0];
+  const positions = new Set();
+  for (let i = 0; i < 40; i++) {
+    const shown = shuffleOptions(question);
+    assert.deepEqual([...shown.options].sort(), [...question.options].sort());
+    assert.equal(shown.options[shown.answer], question.options[question.answer]);
+    shown.options.forEach((option, j) =>
+      assert.equal(shown.explanations[j], question.explanations[question.options.indexOf(option)]));
+    positions.add(shown.answer);
+  }
+  assert.ok(positions.size > 1, 'la respuesta correcta debe cambiar de posición');
+  assert.equal(question.answer, ab410.questions[0].answer, 'el banco no se modifica');
+  const f = await fixture(t);
+  const s = await f.start({ count: 3 });
+  assert.ok(s.questions.every(q => !('optionOrder' in q)), 'el orden original no se expone');
+  const answered = await f.request(`/sessions/${s.id}/answer`, 'POST', answerFor(s));
+  assert.equal(answered.questions[0].feedback.correct, true);
 });
 
 test('repaso combina acierto y esfuerzo: 10 minutos, 1/3/7/14/30 días y retroceso', () => {
@@ -211,7 +248,7 @@ test('preferencias, lectura, snapshots y respuestas sobreviven al reinicio de SQ
   await f.request('/settings', 'PATCH', { theme: 'dark' });
   await f.request('/study/ab-410/agents', 'PUT', { blockIndex: 3, completed: false });
   const s = await f.start();
-  await f.request(`/sessions/${s.id}/answer`, 'POST', answerFor(s, { selected: 0, difficulty: 3 }));
+  await f.request(`/sessions/${s.id}/answer`, 'POST', wrongFor(s, { difficulty: 3 }));
   await f.request(`/sessions/${s.id}/next`, 'POST', { cursor: 0 });
   const snapshot = f.db.prepare('SELECT questions FROM sessions WHERE id=?').get(s.id).questions;
   await f.stop();
@@ -223,7 +260,7 @@ test('preferencias, lectura, snapshots y respuestas sobreviven al reinicio de SQ
   assert.equal(state.study[0].completed, 0);
   const resumed = await reopened.request(`/sessions/${s.id}`);
   assert.equal(resumed.cursor, 1); assert.equal(resumed.answered, 1);
-  assert.equal(resumed.questions[0].attempt.selected, 0);
+  assert.equal(resumed.questions[0].attempt.selected, wrongFor(s).selected);
   assert.equal(reopened.db.prepare('SELECT questions FROM sessions WHERE id=?').get(s.id).questions, snapshot);
   const exported = await reopened.request('/export');
   assert.equal(exported.version, 1); assert.equal(exported.attempts.length, 1);
@@ -288,7 +325,7 @@ test('extraHosts admite solo los nombres de red indicados', async t => {
 test('estadísticas separan el histórico de aciertos de la última dificultad/resultado', async t => {
   const f = await fixture(t);
   let s = await f.start({ count: 1 });
-  await f.request(`/sessions/${s.id}/answer`, 'POST', answerFor(s, { selected: 0, difficulty: 3 }));
+  await f.request(`/sessions/${s.id}/answer`, 'POST', wrongFor(s, { difficulty: 3 }));
   await f.request(`/sessions/${s.id}/next`, 'POST', { cursor: 0 });
   s = await f.start({ count: 1 });
   await f.request(`/sessions/${s.id}/answer`, 'POST', answerFor(s, { difficulty: 1 }));

@@ -2,7 +2,7 @@ import express from 'express';
 import { randomUUID } from 'node:crypto';
 import { certifications, certificationInterests, validateContent } from '../content/index.mjs';
 import { openDatabase, transaction } from './db.mjs';
-import { questionProgress, selectQuestions } from './learning.mjs';
+import { questionProgress, selectQuestions, shuffleOptions } from './learning.mjs';
 
 class HttpError extends Error {
   constructor(status, message) { super(message); this.status = status; }
@@ -62,7 +62,7 @@ export function createApp(databasePath, { extraHosts = [] } = {}) {
       score: completed ? attempts.reduce((n, a) => n + a.correct, 0) : null,
       questions: questions.map(q => {
         const a = attempts.find(a => a.question_id === q.id);
-        const { answer, explanations, sources, ...safe } = q;
+        const { answer, explanations, sources, optionOrder, ...safe } = q;
         return {
           ...safe,
           attempt: a ? { selected: a.selected, difficulty: a.difficulty, durationMs: a.duration_ms } : null,
@@ -160,7 +160,8 @@ export function createApp(databasePath, { extraHosts = [] } = {}) {
     check(mode !== 'exam' || (!lessonId && filter === 'all'), 'El simulacro debe abarcar todos los temas.');
     const active = db.prepare("SELECT id FROM sessions WHERE certification=? AND status='active' AND mode=?").get(cert.id, mode);
     check(!active, 'Ya tienes una sesión activa de este modo. Reanúdala o finalízala antes de crear otra.', 409);
-    const selected = selectQuestions(cert, questionProgress(cert.questions, getAttempts(cert.id)), { mode, filter, order, lessonId, count });
+    const selected = selectQuestions(cert, questionProgress(cert.questions, getAttempts(cert.id)), { mode, filter, order, lessonId, count })
+      .map(shuffleOptions);
     check(selected.length, 'No hay preguntas que coincidan. Prueba otro filtro o realiza un diagnóstico inicial.');
     const id = randomUUID();
     const created = now();

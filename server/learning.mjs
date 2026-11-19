@@ -9,6 +9,18 @@ export function shuffle(items) {
   return result;
 }
 
+// Each session snapshot gets its own option order; grading uses the snapshot, so history stays valid.
+export function shuffleOptions(question) {
+  const order = shuffle(question.options.map((_, i) => i));
+  return {
+    ...question,
+    options: order.map(i => question.options[i]),
+    explanations: order.map(i => question.explanations[i]),
+    answer: order.indexOf(question.answer),
+    optionOrder: order,
+  };
+}
+
 export function questionProgress(questions, attempts, now = Date.now()) {
   const byId = new Map(questions.map(q => [q.id, []]));
   for (const a of attempts) byId.get(a.question_id)?.push(a);

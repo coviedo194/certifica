@@ -64,8 +64,11 @@ solo las escenas afectadas; conservar `tutorial/.cache/`, `tutorial/generated/` 
    evaluación oficial y mantener sus resultados separados.
 7. **Verificar**: contrastar contratos y límites en su fuente; una sola opción
    defendible por pregunta; sin absolutos, pistas por longitud, distractores absurdos
-   ni repetición. El banco es introductorio: ampliarlo con casos más discriminantes,
-   sin prometer equivalencia con el examen.
+   ni repetición. `validateContent` rechaza una correcta que supere en más de un 10 %
+   al distractor más largo, o un banco donde sea la más larga en más del 35 %; corregir
+   igualando distractores plausibles, no relajando el umbral. El banco es
+   introductorio: ampliarlo con casos más discriminantes, sin prometer equivalencia
+   con el examen.
 8. **Versionar**: IDs estables y `version` por lección/pregunta más versión global.
    No reutilizar IDs ni romper referencias históricas. Registrar cambios editoriales
    significativos en `CHANGELOG.md` con fecha de revisión.
@@ -139,8 +142,10 @@ del alumno a terceros ni generar contenido automático sin validación.
 - Guardar la dificultad **antes de conocer el resultado**. Los intentos confirmados
   son inmutables; un reintento de la misma petición no duplica filas y una respuesta
   distinta en el mismo intento se rechaza. Una sesión activa por modo y certificación.
-- Cada sesión guarda una instantánea versionada de sus preguntas: nunca recalificar
-  históricos ni eliminar en silencio referencias usadas.
+- Cada sesión guarda una instantánea versionada de sus preguntas, con las opciones ya
+  barajadas (`shuffleOptions`: `answer` y `explanations` reordenados y `optionOrder`
+  con los índices originales, que no se expone). `attempts.selected` se refiere a ese
+  orden. Nunca recalificar históricos ni eliminar en silencio referencias usadas.
 - Simulacro: no revelar claves, explicaciones ni estadísticas antes de terminar. El
   plazo se valida en el servidor y no se reinicia al recargar; las no contestadas
   cuentan en el total. La exportación JSON incluye claves y no es un examen supervisado.

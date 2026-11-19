@@ -5,7 +5,8 @@
 Aplicación local, monousuario, sin autenticación: React + TypeScript + Vite,
 Express en Node.js 24 y `node:sqlite`. Una terminal y un puerto. No convertirla en
 Power App, no incorporar servicios de IA, telemetría ni dependencias de nube sin
-una petición explícita. Servir siempre en loopback.
+una petición explícita. Servir por defecto en loopback; la red local solo con `HOST` explícito
+(`start-app.ps1`), sin quitar la validación de Host/Origin.
 
 El usuario tiene experiencia en Power Platform y menos en Copilot Studio.
 La ruta recomendada prioriza esas brechas; no inferir dominio ni inventar intentos.

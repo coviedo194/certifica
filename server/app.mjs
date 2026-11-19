@@ -12,14 +12,18 @@ function check(condition, message, status = 400) {
 }
 const now = () => new Date().toISOString();
 
-export function createApp(databasePath) {
+export function createApp(databasePath, { extraHosts = [] } = {}) {
   validateContent();
   const db = openDatabase(databasePath);
+  const allowedExtra = new Set(extraHosts.map(h => h.toLowerCase()));
   const app = express();
   app.disable('x-powered-by');
   app.use((req, res, next) => {
     const host = req.headers.host ?? '';
-    if (!/^(localhost|127\.0\.0\.1|\[::1\])(?::\d+)?$/.test(host)) return res.status(403).json({ error: 'Solo se admite acceso local.' });
+    const hostname = host.replace(/:\d+$/, '').toLowerCase();
+    if (!/^(localhost|127\.0\.0\.1|\[::1\])(?::\d+)?$/.test(host) && !allowedExtra.has(hostname)) {
+      return res.status(403).json({ error: 'Solo se admite acceso local.' });
+    }
     if (!['GET', 'HEAD', 'OPTIONS'].includes(req.method) && req.headers.origin &&
         req.headers.origin !== `http://${host}`) return res.status(403).json({ error: 'Origen no permitido.' });
     res.set({ 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer', 'X-Frame-Options': 'DENY' });

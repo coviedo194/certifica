@@ -19,7 +19,7 @@ async function fixture(t, path = ':memory:') {
   const stop = async () => {
     if (closed) return;
     closed = true;
-    await new Promise(resolve => server.close(resolve)); db.close();
+    await new Promise(resolve => { server.close(resolve); server.closeAllConnections(); }); db.close();
   };
   t.after(stop);
   const request = async (path, method = 'GET', body, expected = 200, headers = {}) => {
@@ -227,6 +227,8 @@ test('preferencias, lectura, snapshots y respuestas sobreviven al reinicio de SQ
   assert.equal(reopened.db.prepare('SELECT questions FROM sessions WHERE id=?').get(s.id).questions, snapshot);
   const exported = await reopened.request('/export');
   assert.equal(exported.version, 1); assert.equal(exported.attempts.length, 1);
+  // Cerrar antes de que t.after borre el directorio: en Windows el SQLite abierto bloquea el rm.
+  await reopened.stop();
 });
 
 test('validación rechaza filtros vacíos, temas, secciones y cantidades inválidas', async t => {
@@ -263,6 +265,24 @@ test('Host y Origin impiden escritura cross-origin y DNS rebinding básico', asy
   });
   assert.equal(status, 403);
   assert.equal((await f.request('/state')).settings.theme, 'system');
+});
+
+test('extraHosts admite solo los nombres de red indicados', async t => {
+  const { app, db } = createApp(':memory:', { extraHosts: ['192.168.0.50', 'MiEquipo'] });
+  const server = app.listen(0, '127.0.0.1');
+  await once(server, 'listening');
+  t.after(() => new Promise(resolve => {
+    server.close(() => { db.close(); resolve(); });
+    server.closeAllConnections();
+  }));
+  const statusFor = host => new Promise((resolve, reject) => {
+    httpGet(`http://127.0.0.1:${server.address().port}/api/state`, { headers: { Host: host } }, response => {
+      response.resume(); response.on('end', () => resolve(response.statusCode));
+    }).on('error', reject);
+  });
+  assert.equal(await statusFor('192.168.0.50:4100'), 200);
+  assert.equal(await statusFor('miequipo:4100'), 200);
+  assert.equal(await statusFor('attacker.invalid'), 403);
 });
 
 test('estadísticas separan el histórico de aciertos de la última dificultad/resultado', async t => {

@@ -4,12 +4,23 @@ Web local monousuario para estudiar **Microsoft Certified: Intelligent Applicati
 Builder Associate (AB-410)** sin reproducir el recorrido completo de Microsoft Learn.
 Interfaz y material en español, sin cuenta, suscripción ni claves de IA.
 
+Es una aplicación **monousuario**: cada persona clona el repositorio y la ejecuta en
+su propio equipo. El progreso, las sesiones y las estadísticas se guardan solo en su
+copia local (`data/progress.sqlite`, fuera de Git) y no se comparten con nadie.
+
+> Proyecto personal de estudio, **no afiliado, patrocinado ni respaldado por
+> Microsoft**. Microsoft, Copilot Studio, Power Apps, Power Automate, Power Platform
+> y los nombres de sus certificaciones son marcas de Microsoft y se usan solo para
+> identificar el examen y su documentación.
+
 ## Arrancar
 
-Requiere **Node.js 24 o superior** y npm. SQLite está incluido en Node; no requiere
-instalar un servidor de base de datos.
+Requiere **Node.js 24 o superior**, npm y Git. SQLite está incluido en Node; no
+requiere instalar un servidor de base de datos.
 
 ```bash
+git clone <URL del repositorio>
+cd <carpeta clonada>
 npm install
 npm run dev
 ```
@@ -36,7 +47,13 @@ PORT=4200 DB_PATH=./data/otro-progreso.sqlite npm run dev
 ```
 
 El servidor escucha **solo en 127.0.0.1**, comprueba Host/Origin y no habilita CORS.
-No está diseñado para publicarse directamente en Internet: no tiene autenticación.
+
+**Opcional, acceso desde tus otros dispositivos:** con `HOST=0.0.0.0` escucha también
+en la red local y acepta como Host solo las IPv4 y el nombre de este equipo. En
+Windows, `start-app.ps1` compila y arranca así en el puerto 4100 (útil desde una tarea
+programada). Sigue siendo monousuario: quien entre comparte tu mismo progreso y no hay
+autenticación, así que úsalo solo en una red de confianza y nunca lo publiques en
+Internet. Puede requerir permitir el puerto en el firewall.
 El puerto debe estar libre; no se terminan otros procesos automáticamente.
 
 ## Qué incluye
@@ -303,3 +320,13 @@ Repositorio Git inicializado localmente; no hay remoto ni publicación automáti
   de instrucciones para la IA. Las tres lecciones pasan a versión 2; se mantienen
   IDs, ejercicios y preguntas, sin alterar el progreso ni las sesiones históricas.
   Es una revisión de redacción, no una nueva consulta de las fuentes.
+
+## Licencia
+
+El código y el material original (lecciones, preguntas, tutorial) se distribuyen bajo
+la [licencia MIT](LICENSE). Quedan **excluidas** las tres capturas de
+`public/study-media/ab410/` (`prompt-input-columns.png`, `prompt-status.png`,
+`business-rule-condition.png`): son obra de Microsoft, proceden de
+`MicrosoftDocs/powerapps-docs` y se mantienen bajo
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), sin cambios y con su
+atribución en los metadatos de cada imagen.

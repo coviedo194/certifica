@@ -4,16 +4,19 @@
 
 Aplicación local, monousuario, sin autenticación: React + TypeScript + Vite,
 Express en Node.js 24 y `node:sqlite`. Una terminal y un puerto. No convertirla en
-Power App, no incorporar servicios de IA, telemetría ni dependencias de nube sin
-una petición explícita. Servir por defecto en loopback; la red local solo con `HOST` explícito
-(`start-app.ps1`), sin quitar la validación de Host/Origin.
+Power App ni incorporar servicios de IA, telemetría o dependencias de nube sin
+petición explícita. Servir por defecto en loopback; la red local solo con `HOST`
+explícito (`start-app.ps1`), sin quitar la validación de Host/Origin ni habilitar CORS.
 
-El usuario tiene experiencia en Power Platform y menos en Copilot Studio.
-La ruta recomendada prioriza esas brechas; no inferir dominio ni inventar intentos.
-UI y material en español; conservar terminología de producto para reconocer el
-examen y encontrar documentación.
+El usuario tiene experiencia en Power Platform y menos en Copilot Studio; la ruta
+recomendada prioriza esas brechas. No inferir dominio ni inventar intentos. UI y
+material en español, conservando la terminología de producto para reconocer el
+examen y encontrar documentación. El README es breve y para usuarios: los detalles
+de mantenimiento van aquí y los cambios de contenido en `CHANGELOG.md`.
 
 ## Comandos
+
+Documentar comandos en sintaxis de PowerShell (Windows y `pwsh` en macOS).
 
 ```powershell
 npm install
@@ -21,145 +24,159 @@ npm run dev       # API + Vite en http://127.0.0.1:4100
 npm run start     # prestart compila; luego sirve API + dist
 npm run build
 npm test
+npm run test:ui   # portada en navegador, SQLite en memoria; requiere Chromium de Playwright
 ```
 
-`PORT` y `DB_PATH` son opcionales. No sobrescribir ni borrar el SQLite del usuario
-en pruebas: usar memoria o un directorio temporal explícito. No guardar datos
-personales, sesiones reales ni archivos de SQLite en Git.
+`PORT`, `DB_PATH` y `HOST` son opcionales. No ejecutar `dev` y `start` a la vez en
+el mismo puerto; no se terminan otros procesos. En pruebas, nunca sobrescribir ni
+borrar el SQLite del usuario: usar memoria o un directorio temporal explícito. No
+guardar datos personales, sesiones reales ni archivos SQLite en Git.
 
-## Método editorial repetible
+**Tutorial** (`tutorial/index.html`, abrible directamente o en `/tutorial/index.html`):
+`npm run tutorial:capture [-- <escena>]` recaptura pantallas con una instancia
+temporal en loopback y SQLite en memoria; `npm run tutorial:video` genera el MP4
+(requiere macOS, voz española local —`Paulina` por defecto—, `ffmpeg`, `ffprobe` y
+Chromium de Playwright). Editar la `narration` del bloque `tutorial-data` regenera
+solo las escenas afectadas; conservar `tutorial/.cache/`, `tutorial/generated/` y
+`tutorial/assets/`. `TUTORIAL_VOICE` y `TUTORIAL_RATE` (80–250 ppm) son opcionales.
+
+## Método editorial
 
 1. **Verificar alcance**: leer la página de certificación y la guía de aptitudes
-   actuales. Registrar URL, fecha real de consulta y versión del paquete. No
-   adivinar contenidos por el código de examen ni por etiquetas de productos.
-2. **Mapear objetivos**: dominio → aptitud → lección → preguntas. Conservar pesos
-   oficiales y distinguir prerrequisitos de objetivos medidos. Cubrir cada objetivo
-   con contenido y registrar huecos en vez de anunciar cobertura inexistente.
-3. **Contrastar fuentes**: Microsoft Learn primero, especialmente capacidades nuevas,
-   límites y seguridad. La comunidad puede aportar perspectivas, nunca demostrar
-   que algo «cae en el examen». Identificar fuente oficial o no oficial; no inventar
-   fecha de consulta. Si dos secciones oficiales se contradicen, señalarlo y evitar
-   una pregunta que dependa de la ambigüedad hasta resolverla.
-4. **Condensar**: explicar qué elegir, por qué y cuándo no. Un módulo contiene
-   decisiones clave, comparación, error frecuente, recuperación activa y laboratorio
-   con criterio de éxito. No copiar capítulos ni hacer un resumen tan corto que
-   obligue a memorizar una respuesta sin entenderla. Los minutos son estimados
-   de lectura; no incluyen laboratorio, repaso o experiencia práctica.
-   Distinguir explicaciones, recomendaciones de diseño y ejercicios. Etiquetar
-   los consejos como recomendaciones y aclarar la jerga antes de usarla.
-   Introducir «aplicación de lienzo de Power Apps (canvas app)» antes de abreviar
-   a «canvas»; no asumir que identifica el producto por sí solo. Especificar
-   «Agent builder de Power Apps» y no extender sus límites a Copilot Studio
-   ni a otras funciones que compartan el nombre Agent builder.
-   Destacar con `**negrita**` el término que se define y separar definición,
-   ejemplo y recomendación cuando se mezclen. Sustituir expresiones vagas como
-   «experiencias compatibles» por el producto, editor o alcance concreto.
-   Añadir un ejemplo breve y original cuando una explicación abstracta se entienda
-   mejor con una situación concreta; usarlo para aclarar la decisión o el resultado,
-   no para repetir el laboratorio o la recuperación activa. No forzar ejemplos en
-   cada bloque ni presentarlos como preguntas o material oficial del examen.
-   La ayuda de cada recuperación activa debe explicar una respuesta posible para ese
-   caso y por qué; no sustituirla por una invitación genérica a revisar el temario.
-   Cada diapositiva debe mostrar entre uno y tres conceptos o resultados de
-   aprendizaje concretos, distintos del título y coherentes con su explicación,
-   repaso o laboratorio, en una lista breve. La respuesta orientativa de cada
-   recuperación activa también debe separar las ideas en viñetas.
-   Revisar también el resto del material cuando una explicación cause confusión:
-   una idea por párrafo, primero definición y después ejemplo. Aclarar términos
-   como asíncrono, determinista, idempotencia o alcance al introducirlos. Mantener
-   los nombres de producto/controles, pero explicar qué hacen. Colocar las
-   advertencias junto al caso al que afectan, sin sustituir la explicación por
-   cautelas abstractas ni quitar limitaciones importantes para simplificar.
-   No sobreexplicar: eliminar incisos que desvíen a otros productos o asuntos
-   cuando no cambien la decisión que se está enseñando. Una ubicación de menú
-   no necesita una explicación adicional sobre dónde puede mostrarse el chat.
-   No sustituir la enseñanza por «la guía incluye»: explicar la capacidad y un
-   ejemplo o recorrido verificado. Identificar la guía de aptitudes si se cita;
-   no dar a entender que existe un tutorial que el material no ofrece.
-   Un bloque de concepto no es una lista de imperativos ni de definiciones con
-   «=» o comas encadenadas: cada término clave se define con qué es, cómo se usa
-   o un ejemplo, y por qué elegirlo frente a su alternativa, con sus límites. Si
-   un bloque solo dice qué hacer sin explicar qué es aquello, reescribirlo.
-   Para imágenes: preferir capturas reales de documentación con permiso verificable,
-   revisar lo que muestran y explicar solo el detalle relevante. Conservar fuente,
-   autoría, licencia y fecha; servir copias locales, texto alternativo y ampliación.
-   No inventar interfaces con IA ni presentar una captura antigua como UI garantizada.
-5. **Crear preguntas originales**: escenarios nuevos, una mejor respuesta y
-   distractores plausibles. Explicar cada alternativa, indicar objetivo, módulo,
-   fuentes, procedencia `original` y versión. No presentar documentación oficial
-   como si validara la autoría o el carácter oficial de nuestra pregunta.
+   vigentes; registrar URL, fecha real de consulta y versión del paquete. No adivinar
+   contenidos por el código de examen ni por etiquetas de productos.
+2. **Mapear objetivos**: dominio → aptitud → lección → preguntas, con pesos oficiales.
+   Distinguir prerrequisitos de objetivos medidos y registrar huecos en vez de
+   anunciar cobertura inexistente.
+3. **Contrastar fuentes**: Microsoft Learn primero, sobre todo en capacidades nuevas,
+   límites y seguridad. La comunidad aporta perspectivas, nunca prueba que algo
+   «cae en el examen». Marcar oficial/no oficial y no inventar fechas de consulta.
+   Si dos fuentes oficiales se contradicen, señalarlo y no basar preguntas en ello.
+4. **Condensar** (ver «Redacción de lecciones»): explicar qué elegir, por qué y cuándo
+   no. Cada módulo tiene decisiones clave, comparación, error frecuente, recuperación
+   activa y laboratorio con criterio de éxito. Los minutos son de lectura estimada.
+5. **Crear preguntas originales**: escenarios nuevos, una única mejor respuesta y
+   distractores plausibles. Explicar cada alternativa; indicar objetivo, módulo,
+   fuentes, procedencia `original` y versión. Las fuentes respaldan conceptos, no la
+   autoría ni el carácter oficial de la pregunta.
 6. **No usar dumps**: no copiar ni parafrasear preguntas reales, filtraciones,
-   bancos de ExamTopics o evaluaciones oficiales cerradas. Etiquetar «no oficial»
-   no concede derechos de reproducción. Enlazar la evaluación oficial y mantener
-   sus resultados separados, salvo integración autorizada y soportada.
-7. **Verificar**: revisar contratos y limitaciones en su fuente; probar que cada
-   pregunta tiene una sola opción defendible. Evitar absolutos, pistas por longitud,
-   distractores absurdos y repetición. Usar material comunitario solo con atribución
-   y contraste. El banco inicial es introductorio: ampliarlo con casos de mayor
-   discriminación, no prometer equivalencia con el examen.
-8. **Versionar**: IDs estables, `version` por lección/pregunta y versión global.
-   No reutilizar un ID para otro concepto. Preservar compatibilidad de referencias
-   históricas. Registrar cambios editoriales significativos y nueva fecha de revisión.
+   ExamTopics ni evaluaciones oficiales. «No oficial» no concede derechos. Enlazar la
+   evaluación oficial y mantener sus resultados separados.
+7. **Verificar**: contrastar contratos y límites en su fuente; una sola opción
+   defendible por pregunta; sin absolutos, pistas por longitud, distractores absurdos
+   ni repetición. El banco es introductorio: ampliarlo con casos más discriminantes,
+   sin prometer equivalencia con el examen.
+8. **Versionar**: IDs estables y `version` por lección/pregunta más versión global.
+   No reutilizar IDs ni romper referencias históricas. Registrar cambios editoriales
+   significativos en `CHANGELOG.md` con fecha de revisión.
 
-Esto es una definición reproducible, **no entrenamiento de un modelo**. No enviar
-datos del alumno a terceros ni generar contenido automático sin validación.
+Es una metodología reproducible, **no entrenamiento de un modelo**. No enviar datos
+del alumno a terceros ni generar contenido automático sin validación.
+
+### Redacción de lecciones
+
+- Una idea por párrafo: primero definición, después ejemplo y, aparte, la
+  recomendación (etiquetada como tal). Destacar con `**negrita**` el término definido.
+- Un bloque de concepto no es una lista de imperativos ni definiciones con «=»:
+  cada término dice qué es, cómo se usa o un ejemplo, por qué elegirlo frente a su
+  alternativa y sus límites.
+- Aclarar jerga al introducirla (asíncrono, determinista, idempotencia, alcance).
+  Mantener nombres de producto y controles, explicando qué hacen. Sustituir
+  expresiones vagas («experiencias compatibles») por el producto o alcance concreto.
+- Decir «aplicación de lienzo de Power Apps (canvas app)» antes de abreviar a
+  «canvas». Especificar «Agent builder de Power Apps» y no extender sus límites a
+  Copilot Studio ni a otras funciones con el mismo nombre.
+- Ejemplos breves y originales solo cuando aclaran una decisión; no forzarlos ni
+  presentarlos como preguntas oficiales.
+- Advertencias junto al caso afectado, sin quitar limitaciones importantes. No
+  sobreexplicar ni desviarse a otros productos que no cambian la decisión.
+- No sustituir la enseñanza por «la guía incluye»: explicar la capacidad con un
+  ejemplo o recorrido verificado e identificar la guía si se cita.
+- Cada diapositiva muestra en lista de uno a tres conceptos concretos, distintos del
+  título y coherentes con su contenido. La respuesta orientativa de cada recuperación
+  activa explica una respuesta posible y por qué, en viñetas.
+- Imágenes: preferir capturas reales de documentación con permiso verificable,
+  copia local, texto alternativo, ampliación y metadatos de fuente, autoría,
+  licencia y fecha. No inventar interfaces ni presentar capturas antiguas como UI
+  garantizada.
 
 ## Añadir una certificación (por ejemplo AB-100)
 
-- Verificar primero su existencia, nombre y guía vigente. No crear una entrada vacía
-  ni simular disponibilidad.
-- Los recordatorios de interés pueden registrarse solo con metadatos en
-  `certificationInterests` de `content/index.mjs`, fuera de los paquetes disponibles.
-  Seleccionarlos debe mostrar que no tienen material, sin activar cursos vacíos
-  ni generar contenido. GH-300 y AB-100 quedan pendientes hasta una petición explícita.
-- Añadir un módulo `content/<codigo>.mjs` siguiendo `ab410.mjs`: metadatos,
-  dominios con `share` que sumen 1, referencias, lecciones, ruta y preguntas.
-- Registrar el objeto en `content/index.mjs`; la UI usa el catálogo y el progreso
-  se separa por certificación. No codificar datos de AB-410 en la lógica de selección.
-- Revisar tamaño y distribución de preguntas del nuevo banco. Los límites actuales
-  del formulario y API de simulacro (hasta 40) responden al banco inicial: si cambian,
-  derivarlos de metadatos por certificación y actualizar su texto y pruebas juntos.
-- La descripción inicial/ruta y varios textos de bienvenida son específicos de la
-  experiencia actual AB-410. Hacerlos metadatos por certificación antes de añadir
-  el segundo paquete; no dejar mensajes de AB-410 en un estudio de AB-100.
-- Ejecutar validación de contenido y añadir casos para independencia del progreso,
+- Verificar existencia, nombre y guía vigente; no crear entradas vacías.
+- Los recordatorios van solo como metadatos en `certificationInterests` de
+  `content/index.mjs`: al seleccionarlos se avisa de que no tienen material, sin
+  activar cursos vacíos. GH-300 y AB-100 quedan pendientes hasta petición explícita.
+- Crear `content/<codigo>.mjs` siguiendo `ab410.mjs` (metadatos, dominios con
+  `share` que sumen 1, referencias, lecciones, ruta y preguntas) y registrarlo en
+  `content/index.mjs`. No codificar datos de AB-410 en la lógica de selección.
+- Antes del segundo paquete, convertir en metadatos por certificación los textos
+  propios de AB-410 (ruta inicial, bienvenida, «Punto de partida», método en
+  Fuentes) y el límite de 40 preguntas del simulacro, actualizando texto y pruebas.
+- Añadir la fila a la tabla del README y validar: independencia del progreso,
   cuota de dominios, referencias y sesiones congeladas.
 
-## Invariantes de datos y comportamiento
+## AB-410: alcance actual
 
-- SQLite es la fuente de verdad: preferencias, lectura, sesiones e intentos.
-  No sustituirlo por localStorage para el progreso.
-- Guardar la dificultad **antes de conocer el resultado**, independiente del acierto.
-  No cambiar intentos confirmados. Un reintento de la misma petición no crea filas
-  duplicadas; una respuesta distinta en el mismo intento debe rechazarse.
-- Mantener snapshots de preguntas por sesión. Nunca recalificar históricos con
-  un banco actualizado ni eliminar silenciosamente referencias usadas.
-- No revelar claves/explicaciones del simulacro por sus endpoints de preguntas ni
-  estadísticas antes de terminar. La exportación local es una copia completa,
-  no una interfaz de simulacro; no es una aplicación de examen supervisado.
-- La fecha límite se valida en el servidor y no se reinicia al salir/recargar.
-  Las no contestadas cuentan en el total al finalizar.
+- Guía: <https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/ab-410>,
+  consultada el 2026-11-16. 12 módulos (103 min de lectura) y 60 preguntas.
+- Áreas: foundation 25–30 %, intelligent applications 25–30 %, business logic and
+  automation 40–45 %. El simulacro de 40 toma 11/11/18; los más pequeños usan restos
+  mayores y pueden salir de las bandas. No reproduce el algoritmo oficial.
+- Fuente comunitaria usada: estándares de canvas de Matthew Devaney (no oficial).
+- La evaluación oficial (AI Skills Navigator) se enlaza desde el catálogo; requiere
+  sesión de Microsoft, no se extrae ni se sincroniza.
+- Las tres capturas de `public/study-media/ab410/` son de `MicrosoftDocs/powerapps-docs`
+  (CC BY 4.0), sin cambios, con atribución en sus metadatos y excluidas de MIT.
+- AI Hub/AI Builder y Copilot cambian de nombre y despliegue: priorizar conceptos y
+  no memorizar precios, límites o rutas de UI sin revisión.
+
+## Datos y comportamiento
+
+- SQLite es la fuente de verdad (`data/progress.sqlite`): `settings` (certificación
+  activa, tema), `study` (módulo, sección, completado), `sessions` (modo, orden
+  materializado, cursor, plazo, estado) y `attempts` (respuesta, acierto, dificultad
+  1–3, tiempo). No sustituirlo por localStorage para el progreso.
+- Guardar la dificultad **antes de conocer el resultado**. Los intentos confirmados
+  son inmutables; un reintento de la misma petición no duplica filas y una respuesta
+  distinta en el mismo intento se rechaza. Una sesión activa por modo y certificación.
+- Cada sesión guarda una instantánea versionada de sus preguntas: nunca recalificar
+  históricos ni eliminar en silencio referencias usadas.
+- Simulacro: no revelar claves, explicaciones ni estadísticas antes de terminar. El
+  plazo se valida en el servidor y no se reinicia al recargar; las no contestadas
+  cuentan en el total. La exportación JSON incluye claves y no es un examen supervisado.
 - No confundir el porcentaje local con el umbral escalado 700 de Microsoft.
-- El orden fijo es determinista. Mayor dificultad usa la fórmula documentada.
-  Aleatorio utiliza Fisher–Yates. Repaso espaciado es una heurística tipo Leitner.
-- Los errores deben ser visibles. No inventar éxitos, estadísticas, materiales,
-  respuestas o datos de respaldo cuando algo falla.
-- Las migraciones deben conservar datos, usar `PRAGMA user_version` y rechazar
-  versiones más nuevas no soportadas. No modificar esquema sin migración.
-- Probar persistencia tras cerrar/abrir SQLite, validación de entrada, exclusión
-  de respuestas activas de examen y las rutas de fin de sesión.
+- Repaso tipo Leitner: incorrecta o difícil → caja 0, vuelve en 10 min; correcta y
+  media → caja 1 como máximo, al día siguiente; correcta y fácil → avanza (1, 3, 7, 14
+  y 30 días). «Difíciles o falladas» usa la última respuesta; los vencidos solo
+  incluyen preguntas vistas. El tiempo va de cargar a confirmar y se reinicia al recargar.
+- Órdenes: fijo determinista; aleatorio con Fisher–Yates; mayor dificultad con
+  `(1 - aciertos/intentos) × 60 + última_dificultad × 20 + (última_incorrecta ? 30 : 0)`,
+  nuevas con prioridad 0 y empates en orden del banco.
+- Errores visibles: no inventar éxitos, estadísticas, materiales ni datos de respaldo.
+- Migraciones que conserven datos con `PRAGMA user_version`, rechazando versiones
+  más nuevas. No cambiar el esquema sin migración.
+- Copias: con el servidor detenido, copiar el SQLite junto con `-wal`/`-shm`.
+
+## Interfaz
+
+- Portada con una acción principal (empezar, retomar, practicar lo leído, repasar).
+  El simulacro activo tiene prioridad porque su reloj sigue, pero nunca se oculta el
+  acceso al estudio. Completar una lectura no marca dominio.
+- Lectura primero: al estudiar se oculta la ruta y el módulo e índice quedan plegados.
+  **Modo enfoque** deja sección, progreso y avance; se sale con botón visible o `Esc`,
+  no altera el punto de lectura ni persiste al recargar.
+- **Lectura en voz alta** solo con voces españolas locales del navegador; un botón
+  reproducir/pausar y velocidades 1x, 1,25x y 1,5x de un clic. Cambiar velocidad
+  reinicia la sección; avanzar o salir detiene. Si no hay voz, explicar cómo activarla.
+- Priorizar contenido sobre cabeceras decorativas, sin reducir la letra de lectura.
+  El enfoque aprovecha hasta 1480 px, se ajusta en móvil y evita scroll horizontal.
+  En 1920×1080, la ruta empieza antes de 260 px y muestra al menos siete módulos.
 
 ## Validación de cambios
 
-Usar `npm test` y `npm run build`. Si se modifica UI, comprobar en navegador:
-práctica → respuesta + dificultad → feedback → siguiente → reanudar → finalizar;
-simulacro sin feedback; estudio reanudable; estadísticas; los tres temas y móvil.
-Usar un SQLite de prueba separado para no contaminar el progreso del usuario.
-No agregar herramientas de infraestructura solo por cobertura. El modo enfoque
-debe aprovechar el ancho disponible hasta 1480 px, ajustarse al viewport en móvil
-y evitar desplazamiento horizontal.
-Priorizar contenido sobre cabeceras decorativas: comprobar 1920×1080
-(ancho × alto), portátil y móvil en ambas orientaciones. La primera fila de la
-ruta debe empezar antes de 260 px y mostrar al menos siete módulos completos en
-1080 px de alto. Mantener el reproductor junto al enfoque, velocidades de un clic
-y contexto plegable, sin reducir la letra de lectura para hacer encajar la UI.
+`npm test` y `npm run build`. Probar persistencia tras cerrar/abrir SQLite, validación
+de entrada, exclusión de respuestas activas del simulacro y fin de sesión. Si cambia
+la UI, comprobar en navegador con un SQLite separado: práctica → respuesta +
+dificultad → feedback → siguiente → reanudar → finalizar; simulacro sin feedback;
+estudio reanudable; estadísticas; los tres temas; 1920×1080, portátil y móvil en
+ambas orientaciones. No añadir infraestructura solo por cobertura.

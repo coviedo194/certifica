@@ -15,7 +15,7 @@ examen y encontrar documentación.
 
 ## Comandos
 
-```bash
+```powershell
 npm install
 npm run dev       # API + Vite en http://127.0.0.1:4100
 npm run start     # prestart compila; luego sirve API + dist

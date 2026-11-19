@@ -16,9 +16,11 @@ copia local (`data/progress.sqlite`, fuera de Git) y no se comparten con nadie.
 ## Arrancar
 
 Requiere **Node.js 24 o superior**, npm y Git. SQLite está incluido en Node; no
-requiere instalar un servidor de base de datos.
+requiere instalar un servidor de base de datos. Los comandos de esta guía están
+escritos para **PowerShell**: viene con Windows y en macOS o Linux se instala como
+PowerShell 7 (`pwsh`). Los comandos `npm` funcionan igual en cualquier terminal.
 
-```bash
+```powershell
 git clone <URL del repositorio>
 cd <carpeta clonada>
 npm install
@@ -30,7 +32,7 @@ Abre **http://127.0.0.1:4100**. El proceso permanece en esa terminal; detén con
 
 Para uso normal, sin servidor de desarrollo:
 
-```bash
+```powershell
 npm run start
 ```
 
@@ -40,11 +42,15 @@ También existen `npm run build` y `npm test`.
 `npm run test:ui` comprueba la portada y sus accesos al estudio en un navegador
 con SQLite en memoria; requiere el Chromium de Playwright descrito en el tutorial.
 
-Configuración opcional:
+Configuración opcional (PowerShell, también en macOS con `pwsh`):
 
-```bash
-PORT=4200 DB_PATH=./data/otro-progreso.sqlite npm run dev
+```powershell
+$env:PORT = '4200'; $env:DB_PATH = './data/otro-progreso.sqlite'; npm run dev
 ```
+
+Las variables quedan definidas mientras esa ventana de PowerShell siga abierta;
+ciérrala o ejecuta `Remove-Item Env:PORT, Env:DB_PATH` para volver a los valores
+por defecto.
 
 El servidor escucha **solo en 127.0.0.1**, comprueba Host/Origin y no habilita CORS.
 
@@ -127,7 +133,7 @@ pausa y navegación manual. Las capturas usan datos de demostración, no tu prog
 Para generar el MP4 de 1080p se requieren macOS, una voz española local (`Paulina`
 por defecto), `ffmpeg`, `ffprobe` y Chromium de Playwright:
 
-```bash
+```powershell
 npx playwright install chromium  # solo la primera vez
 npm run tutorial:capture        # primera vez o si cambia la interfaz
 npm run tutorial:video          # tutorial/certifica-guia.mp4

@@ -1,17 +1,32 @@
-# Certifica · AB-410
+# Certifica
 
-Web local monousuario para estudiar **Microsoft Certified: Intelligent Applications
-Builder Associate (AB-410)** sin reproducir el recorrido completo de Microsoft Learn.
-Interfaz y material en español, sin cuenta, suscripción ni claves de IA.
+Web local para preparar **certificaciones de Microsoft** en español: lecciones
+condensadas, preguntas originales con explicación, repaso espaciado y simulacros
+cronometrados, sin reproducir el recorrido completo de Microsoft Learn. Sin cuenta,
+suscripción ni claves de IA.
 
 Es una aplicación **monousuario**: cada persona clona el repositorio y la ejecuta en
 su propio equipo. El progreso, las sesiones y las estadísticas se guardan solo en su
-copia local (`data/progress.sqlite`, fuera de Git) y no se comparten con nadie.
+copia local (`data/progress.sqlite`, fuera de Git), separados por certificación, y no
+se comparten con nadie.
+
+## Certificaciones
+
+| Código | Certificación | Estado |
+| --- | --- | --- |
+| **AB-410** | Microsoft Certified: Intelligent Applications Builder Associate | Disponible: 12 módulos y 60 preguntas ([detalle](#ab-410--intelligent-applications-builder-associate)) |
+| GH-300 | GitHub Copilot | De interés, sin material |
+| AB-100 | Agentic AI Business Solutions Architect Expert | De interés, sin material |
+
+Las certificaciones «de interés» son solo recordatorios en Configuración: al
+seleccionarlas se avisa de que aún no tienen material y no cambian la certificación
+activa ni su progreso. No tienen lecciones, preguntas, generación automática ni
+fecha programada. Cómo añadir una nueva está en [AGENTS.md](AGENTS.md).
 
 > Proyecto personal de estudio, **no afiliado, patrocinado ni respaldado por
-> Microsoft**. Microsoft, Copilot Studio, Power Apps, Power Automate, Power Platform
-> y los nombres de sus certificaciones son marcas de Microsoft y se usan solo para
-> identificar el examen y su documentación.
+> Microsoft**. Microsoft, GitHub, Copilot Studio, Power Apps, Power Automate,
+> Power Platform y los nombres de sus certificaciones son marcas de Microsoft y se
+> usan solo para identificar los exámenes y su documentación.
 
 ## Arrancar
 
@@ -21,8 +36,8 @@ escritos para **PowerShell**: viene con Windows y en macOS o Linux se instala co
 PowerShell 7 (`pwsh`). Los comandos `npm` funcionan igual en cualquier terminal.
 
 ```powershell
-git clone <URL del repositorio>
-cd <carpeta clonada>
+git clone https://github.com/coviedo194/certifica.git
+cd certifica
 npm install
 npm run dev
 ```
@@ -62,15 +77,14 @@ autenticación, así que úsalo solo en una red de confianza y nunca lo publique
 Internet. Puede requerir permitir el puerto en el firewall.
 El puerto debe estar libre; no se terminan otros procesos automáticamente.
 
-## Qué incluye
+## Qué ofrece la aplicación
 
-- **12 módulos** de síntesis original: 103 minutos de lectura estimada, más
-  recuperación activa y laboratorios. No es una promesa de dominar el examen en
-  ese tiempo ni un sustituto de práctica real.
-- **60 preguntas originales**, de opción única, con explicación de las cuatro
-  alternativas, referencias y módulo de repaso.
-- Ruta inicial adaptada a experiencia en Power Platform y menor familiaridad con
-  Copilot Studio: agentes → prompts → integración → datos con IA.
+Funciones comunes a cualquier certificación con material. El contenido concreto
+de cada una se describe en su propia sección.
+
+- Módulos de síntesis original con recuperación activa y laboratorios, y
+  **preguntas originales** de opción única con explicación de cada alternativa,
+  referencias y módulo de repaso.
 - Portada guiada con una sola acción principal: empezar, retomar una sesión,
   practicar un módulo leído o repasar preguntas pendientes. El diagnóstico breve
   es una alternativa de práctica no oficial al empezar; el temario, las fuentes y
@@ -88,9 +102,9 @@ El puerto debe estar libre; no se terminan otros procesos automáticamente.
   configuración. La ruta muestra al menos siete módulos completos en 1920×1080;
   las explicaciones sobre el orden y la metodología se despliegan cuando hacen
   falta. Se reduce espacio decorativo, no el tamaño del texto de las lecciones.
-- Tres capturas de Microsoft Learn en columnas de prompt y reglas de negocio,
-  con explicación breve, texto alternativo, fuente y ampliación en otra pestaña.
-  Se guardan localmente, sin modificar ni generar interfaces con IA.
+- Capturas de documentación oficial cuando aclaran una lección, con explicación
+  breve, texto alternativo, fuente, licencia y ampliación en otra pestaña. Se
+  guardan localmente, sin modificar ni generar interfaces con IA.
 - **Modo enfoque** dentro de cada lección: oculta navegación, índice y referencias
   para dejar la sección actual, el progreso y los botones para avanzar. Se sale
   con el botón siempre visible **Salir del modo enfoque** o con **Esc**. Cambiar
@@ -112,16 +126,12 @@ El puerto debe estar libre; no se terminan otros procesos automáticamente.
 - Historial de sesiones y estadísticas globales, por área y pregunta:
   aciertos, intentos, última dificultad, dificultad media y próximo repaso.
 - Temas **sistema, oscuro y claro**, guardados en SQLite.
-- **GH-300 (GitHub Copilot)** y **AB-100 (Agentic AI Business Solutions Architect
-  Expert)** guardadas como certificaciones de interés en Configuración. Al
-  seleccionarlas se avisa de que aún no tienen material; no cambian la certificación
-  activa ni su progreso. Son recordatorios, sin lecciones, preguntas, generación
-  automática ni fecha programada. Solo AB-410 está disponible para estudiar.
+- Selector de certificación en Configuración, con progreso independiente por
+  certificación.
 - Exportación JSON del progreso; no incluye importador JSON en esta versión.
 
-No se ejecutan modelos de IA ni se envían respuestas a terceros. Los laboratorios
-de Power Platform requieren tu propio entorno y sus permisos/licencias.
-No se incluyen preguntas múltiples, drag-and-drop ni todos los formatos del examen.
+No se ejecutan modelos de IA ni se envían respuestas a terceros. No se incluyen
+preguntas múltiples, drag-and-drop ni todos los formatos de examen.
 
 ## Tutorial con voz y vídeo editable
 
@@ -152,7 +162,24 @@ instancia temporal en loopback con SQLite **en memoria**, sin tocar la base real
 La voz y la velocidad pueden cambiarse con `TUTORIAL_VOICE` y `TUTORIAL_RATE`
 (palabras por minuto, de 80 a 250). No se usan servicios externos de síntesis.
 
-## Fuentes y límites
+## AB-410 · Intelligent Applications Builder Associate
+
+Material para **Microsoft Certified: Intelligent Applications Builder Associate
+(AB-410)**, la única certificación con contenido por ahora.
+
+- **12 módulos** de síntesis original: 103 minutos de lectura estimada, más
+  recuperación activa y laboratorios. No es una promesa de dominar el examen en
+  ese tiempo ni un sustituto de práctica real.
+- **60 preguntas originales**, de opción única, con explicación de las cuatro
+  alternativas, referencias y módulo de repaso.
+- Ruta inicial pensada para quien ya conoce Power Platform y está menos
+  familiarizado con Copilot Studio: agentes → prompts → integración → datos con IA.
+- Tres capturas de Microsoft Learn sobre columnas de prompt y reglas de negocio
+  (ver [Licencia](#licencia)).
+- Los laboratorios de Power Platform requieren tu propio entorno y sus
+  permisos/licencias.
+
+### Alcance, fuentes y límites
 
 Fecha de consulta inicial: **2026-11-16**. Fuente de alcance:
 [guía oficial AB-410](https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/ab-410).
@@ -247,9 +274,7 @@ calidad y pasos para añadir otra certificación, por ejemplo AB-100. No se «en
 un modelo con tu información: se conserva una metodología explícita y versionada,
 y el algoritmo ajusta tu repaso con datos locales.
 
-Repositorio Git inicializado localmente; no hay remoto ni publicación automática.
-
-## Registro editorial
+## Registro editorial · AB-410
 
 - **2026-11-18 · contenido 2026-11-18.3:** cada diapositiva muestra un foco
   visible en una lista breve con uno a tres conceptos o resultados concretos que
